@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-'''log_stats'''
-from pymongo import mongoclient
+'''log stats.'''
+from pymongo import MongoClient
+
 
 def print_nginx_request_logs(nginx_collection):
-    '''Prints stats about Nginx request logs.'''
+    '''Prints stats about Nginx request logs.
+    '''
     print('{} logs'.format(nginx_collection.count_documents({})))
     print('Methods:')
     methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
@@ -15,8 +17,10 @@ def print_nginx_request_logs(nginx_collection):
     ))
     print('{} status check'.format(status_checks_count))
 
+
 def print_top_ips(server_collection):
-    '''Prints statistics about the top 10 HTTP IPs in a collection.'''
+    '''Prints statistics about the top 10 HTTP IPs in a collection.
+    '''
     print('IPs:')
     request_logs = server_collection.aggregate(
         [
@@ -36,11 +40,14 @@ def print_top_ips(server_collection):
         ip_requests_count = request_log['totalRequests']
         print('\t{}: {}'.format(ip, ip_requests_count))
 
+
 def run():
-    '''Provides some stats about Nginx logs stored in MongoDB.'''
+    '''Provides some stats about Nginx logs stored in MongoDB.
+    '''
     client = MongoClient('mongodb://127.0.0.1:27017')
     print_nginx_request_logs(client.logs.nginx)
     print_top_ips(client.logs.nginx)
+
 
 if __name__ == '__main__':
     run()
